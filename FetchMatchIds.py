@@ -1,4 +1,4 @@
-from RIOTAPI import RIOTAPI, MajorRegion, Server
+from RIOTAPI import RIOTAPI, MajorRegion, QueueType, Server
 from LeagueRequester import LeagueRequester
 from MatchRequester import MatchRequester
 from SummonerRequester import SummonerRequester
@@ -26,33 +26,36 @@ matchRequester = MatchRequester(api)
 leagueRequester = LeagueRequester(api)
 region = MajorRegion.AMERICAS
 server = Server.NA
+queueType = QueueType.Ranked5x5
 
 #Get the high elo players
 leagueRequester = LeagueRequester(api)
 encryptedPUUIDs = []
-encryptedPUUIDs.append(FetchEncryptedPUUIDs(api, server, leagueRequester.RequestChallengerPlayers(server)))
-#encryptedPUUIDs.append(FetchEncryptedPUUIDs(api, server, leagueRequester.RequestGrandmasterPlayers(server)))
-#encryptedPUUIDs.append(FetchEncryptedPUUIDs(api, server, leagueRequester.RequestMasterPlayers(server)))
+challengerPUUIDs = FetchEncryptedPUUIDs(api, server, leagueRequester.RequestChallengerPlayers(server))
+grandmasterPUUIDs = FetchEncryptedPUUIDs(api, server, leagueRequester.RequestGrandmasterPlayers(server))
+masterPUUIDs = FetchEncryptedPUUIDs(api, server, leagueRequester.RequestMasterPlayers(server))
+encryptedPUUIDs.append(challengerPUUIDs)
+encryptedPUUIDs.append(grandmasterPUUIDs)
+encryptedPUUIDs.append(masterPUUIDs)
 
-# for puuid in encryptedPUUIDs:
-#     match = matchRequester.RequestMatchIds(region, puuid, 0, 100)
-#     print(match)
 
-#match = matchRequester.RequestMatchIds(region, encryptedPUUIDs[0], 0, 10)
-#print(match)
+print("Region: {}".format(region.value))
+print("Server: {}".format(server.value))
+print("Queue Type: {}".format(queueType))
+print()
+print("Total Challenger Count: {}".format(len(challengerPUUIDs)))
+print("Total Grandmaster Count: {}".format(len(grandmasterPUUIDs)))
+print("Total Master Count: {}".format(len(masterPUUIDs)))
+print("Total Player Count: {}".format(len(encryptedPUUIDs)))
 
-print(encryptedPUUIDs)
+matchIDs = set()
+for puuid in encryptedPUUIDs:
+    matches = matchRequester.RequestMatchIds(region, puuid, 0, 100, queueType)
+    matchIDs.update(matches)
 
-# with open('playerIds.txt') as playerFile:
-#     #Apparently readlines keeps the new line character, so it is recommended to read the entire file then split it
-#     allids = playerFile.read().splitlines()
-    
-#     for i in range(0, 1):
-#         id = allids[i]
-#         print(id)
-#         retVal = matchRequester.RequestMatchIds(region, id, 0, 10)
-#         print(retVal)
+print()
+print("Total Match Count: {}".format(len(matchIDs)))
 
-#     #for id in allids:
-#         #print(":{}:".format(id))
-#         #requester.RequestMatchIds(id, 0, 10)
+with open("MatchIds.txt", "w") as matchFile:
+    for id in matchIDs:
+        matchFile.write("{}\n".format(id))
