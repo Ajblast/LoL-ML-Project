@@ -1,4 +1,5 @@
 import requests
+import json
 
 class RIOTAPI:
     def __init__(self, apikey):
@@ -10,8 +11,3 @@ class RIOTAPI:
 
         r = requests.get(url, headers=headers)
         return r.json()
-
-
-#api = RIOTAPI("KEY")
-#retval = api.request("/lol/league/v4/challengerleagues/by-queue/RANKED_SOLO_5x5")
-#print(retval)
