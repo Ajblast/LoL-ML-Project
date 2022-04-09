@@ -22,7 +22,7 @@ class RateLimit:
         # If the request count equals the rate, wait for the passedTime + timeEpsilon to reach the time frame
         if (self.requests == self.rate):
             while (self._DeltaTime() + self.timeEpsilon < self.timeFrame):
-                print("Waiting on request timeframe limit. Requests {}/{} | TimeFrame {}/{}".format(self.requests, self.rate, self._DeltaTime(), self.timeFrame))
+                print("Waiting on request timeframe limit. Requests {}/{} | TimeFrame {:.2f}/{:.2f}".format(self.requests, self.rate, self._DeltaTime(), self.timeFrame))
                 time.sleep(self.sleepTime)
 
     def _reset(self):
