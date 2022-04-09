@@ -1,17 +1,17 @@
-from RIOTAPI import RIOTAPI, Region
+from RIOTAPI import RIOTAPI, Server
 
 class LeagueRequester:
     def __init__(self, api : RIOTAPI):
         self.api = api
 
-    def challengerPlayers(self, region : Region):
+    def RequestChallengerPlayers(self, server : Server):
         endpoint = "/lol/league/v4/challengerleagues/by-queue/RANKED_SOLO_5x5"
-        return self.api.request(region, endpoint)
+        return self.api.request(server, endpoint)
 
-    def grandmasterPlayers(self, region : Region):
+    def RequestGrandmasterPlayers(self, server : Server):
         endpoint = "/lol/league/v4/grandmasterleagues/by-queue/RANKED_SOLO_5x5"
-        return self.api.request(region, endpoint)
+        return self.api.request(server, endpoint)
 
-    def masterPlayers(self, region : Region):
+    def RequestMasterPlayers(self, server : Server):
         endpoint = "/lol/league/v4/masterleagues/by-queue/RANKED_SOLO_5x5"
-        return self.api.request(region, endpoint)
+        return self.api.request(server, endpoint)
