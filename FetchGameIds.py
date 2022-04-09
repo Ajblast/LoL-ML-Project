@@ -1,21 +1,19 @@
-import requests
-import json
-from RIOTAPI import RIOTAPI
-
+from MatchRequester import MatchRequester
+from RIOTAPI import RIOTAPI, MatchRegion
 
 api = RIOTAPI("RGAPI-93b10d04-9914-4a44-ac94-4a183e74445c")
+requester = MatchRequester(api)
+region = MatchRegion.AMERICAS
 
 with open('playerIds.txt') as playerFile:
-    allids = playerFile.readlines()
+    #Apparently readlines keeps the new line character, so it is recommended to read the entire file then split it
+    allids = playerFile.read().splitlines()
     
-    for id in allids:
+    for i in range(0, 1):
+        id = allids[i]
+        retVal = requester.RequestMatchIds(region, id, 0, 10)
+        print(retVal)
 
-#retval = api.request("/lol/league/v4/challengerleagues/by-queue/RANKED_SOLO_5x5")
-#print(type(retval))
-#with open("D:\Classes\Spring 2022\Machine Learning\Project Part 2\Repo\playerIds.json", "a") as writer:
-#    entries = retval["entries"]
-#    playerIds = []
-#    for dict in entries:
-#        playerIds.append(dict["summonerId"])
-#    print(len(playerIds))
-#    writer.write(json.dumps(playerIds))
+    #for id in allids:
+        #print(":{}:".format(id))
+        #requester.RequestMatchIds(id, 0, 10)

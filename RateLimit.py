@@ -2,7 +2,7 @@ import time
 
 class RateLimit:
     #Rate is how many requests can be done in the time frame (In Seconds)
-    def __init__(self, rate, timeFrame, timeEpsilon, sleepTime):
+    def __init__(self, rate : int, timeFrame : int, timeEpsilon : float, sleepTime : float):
         self.rate = rate
         self.timeFrame = timeFrame
         self.timeEpsilon = timeEpsilon
@@ -22,6 +22,7 @@ class RateLimit:
         # If the request count equals the rate, wait for the passedTime + timeEpsilon to reach the time frame
         if (self.requests == self.rate):
             while (self._DeltaTime() + self.timeEpsilon < self.timeFrame):
+                print("Waiting on request timeframe limit. Requests {}/{} | TimeFrame {}/{}".format(self.requests, self.rate, self._DeltaTime(), self.timeFrame))
                 time.sleep(self.sleepTime)
 
     def _reset(self):
@@ -29,4 +30,4 @@ class RateLimit:
         self.startTime = time.perf_counter()
 
     def _DeltaTime(self):
-        return time.perf_counter() - self.startTime()
+        return time.perf_counter() - self.startTime

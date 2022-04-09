@@ -1,8 +1,11 @@
-from RIOTAPI import RIOTAPI
+from RIOTAPI import RIOTAPI, Region
+from LeagueRequester import LeagueRequester
 import os
 
 api = RIOTAPI("RGAPI-93b10d04-9914-4a44-ac94-4a183e74445c")
-retval = api.request("/lol/league/v4/challengerleagues/by-queue/RANKED_SOLO_5x5")
+league = LeagueRequester(api)
+region = Region.NA
+retval = league.challengerPlayers(region)
 print(type(retval))
 
 with open("playerIds.txt", "w") as writer:
@@ -13,4 +16,4 @@ with open("playerIds.txt", "w") as writer:
     print(len(playerIds))
 
     for ids in playerIds:
-        writer.write(ids + "\n")
+        writer.write("{}\n".format(ids))

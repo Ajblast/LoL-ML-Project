@@ -1,10 +1,10 @@
-from RIOTAPI import RIOTAPI
+from RIOTAPI import RIOTAPI, MatchRegion
 
 class MatchRequester:
-    def __init__(self, api):
+    def __init__(self, api : RIOTAPI):
         self.api = api
 
-    def RequestMatchIds(self, puuid, startIndex, count):
+    def RequestMatchIds(self, region : MatchRegion, puuid : str, startIndex : int, count : int):
         if (count <= 0 or count > 100):
             raise ValueError("count must be at least 1 and less than or equal to 100")
         if (startIndex < 0):
@@ -12,14 +12,14 @@ class MatchRequester:
 
         endpoint = "/lol/match/v5/matches/by-puuid/{}/ids?start={}&count={}".format(puuid, startIndex, count)
 
-        return self.api.request(endpoint)
+        return self.api.requestMatch(region, endpoint)
     
-    def RequestMatch(self, matchid):
+    def RequestMatch(self, region : MatchRegion, matchid : str):
         endpoint = "/lol/match/v5/matches/{}".format(matchid)
 
-        return self.api.request(endpoint)
+        return self.api.requestMatch(region, endpoint)
 
-    def RequestMatchTimeline(self, matchid):
+    def RequestMatchTimeline(self, region : MatchRegion, matchid :str):
         endpoint = "/lol/match/v5/matches/{}/timeline".format(matchid)
 
-        return self.api.request(endpoint)
+        return self.api.requestMatch(region, endpoint)
