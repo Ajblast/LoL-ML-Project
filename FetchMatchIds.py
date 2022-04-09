@@ -2,6 +2,7 @@ from RIOTAPI import RIOTAPI, MajorRegion, QueueType, Server
 from LeagueRequester import LeagueRequester
 from MatchRequester import MatchRequester
 from SummonerRequester import SummonerRequester
+import progressbar
 
 # Fetch enctyped PUUIDs from a league entry
 def FetchEncryptedPUUIDs(api : RIOTAPI, server : Server, leagueEntries : dict):
@@ -14,7 +15,10 @@ def FetchEncryptedPUUIDs(api : RIOTAPI, server : Server, leagueEntries : dict):
     #Convert the summoner Ids into encrypted puuids
     summonerRequester = SummonerRequester(api)
     summonerPUUIDs = []
-    for id in summonerIds:
+    
+    widgets = ['[', progressbar.Counter(format='%(value)02d/%(max_value)d'), ']','[', progressbar.Timer(format="Elapsed Time: %(elapsed)s"), ']', progressbar.Bar('*')]
+    for i in progressbar.progressbar(range(len(summonerIds)), widgets=widgets):
+        id = summonerIds[i]
         summoner = summonerRequester.RequestByEncrypedSummonerID(server, id)
         summonerPUUIDs.append(summoner["puuid"])
 
@@ -28,28 +32,38 @@ region = MajorRegion.AMERICAS
 server = Server.NA
 queueType = QueueType.Ranked5x5
 
-#Get the high elo players
-leagueRequester = LeagueRequester(api)
-encryptedPUUIDs = []
-challengerPUUIDs = FetchEncryptedPUUIDs(api, server, leagueRequester.RequestChallengerPlayers(server))
-grandmasterPUUIDs = FetchEncryptedPUUIDs(api, server, leagueRequester.RequestGrandmasterPlayers(server))
-masterPUUIDs = FetchEncryptedPUUIDs(api, server, leagueRequester.RequestMasterPlayers(server))
-encryptedPUUIDs.append(challengerPUUIDs)
-encryptedPUUIDs.append(grandmasterPUUIDs)
-encryptedPUUIDs.append(masterPUUIDs)
-
-
+print()
 print("Region: {}".format(region.value))
 print("Server: {}".format(server.value))
 print("Queue Type: {}".format(queueType))
+
+
+#Get the high elo players
+leagueRequester = LeagueRequester(api)
+encryptedPUUIDs = []
+print("\nFetch Challenger Encrypted PUUIDS")
+challengerPUUIDs = FetchEncryptedPUUIDs(api, server, leagueRequester.RequestChallengerPlayers(server))
+encryptedPUUIDs.extend(challengerPUUIDs)
+
+#print("\nFetch Grandmaster Encrypted PUUIDS")
+#grandmasterPUUIDs = FetchEncryptedPUUIDs(api, server, leagueRequester.RequestGrandmasterPlayers(server))
+#encryptedPUUIDs.extend(grandmasterPUUIDs)
+
+#print("\nFetch Master Encrypted PUUIDS")
+#masterPUUIDs = FetchEncryptedPUUIDs(api, server, leagueRequester.RequestMasterPlayers(server))
+#encryptedPUUIDs.extend(masterPUUIDs)
+
 print()
 print("Total Challenger Count: {}".format(len(challengerPUUIDs)))
-print("Total Grandmaster Count: {}".format(len(grandmasterPUUIDs)))
-print("Total Master Count: {}".format(len(masterPUUIDs)))
+#print("Total Grandmaster Count: {}".format(len(grandmasterPUUIDs)))
+#print("Total Master Count: {}".format(len(masterPUUIDs)))
 print("Total Player Count: {}".format(len(encryptedPUUIDs)))
 
+print("\nFetch Player Match IDs")
 matchIDs = set()
-for puuid in encryptedPUUIDs:
+widgets = ['[', progressbar.Counter(format='%(value)02d/%(max_value)d'), ']', progressbar.Timer(format="Elapsed Time: %(elapsed)s"), ']', progressbar.Bar('*')]
+for i in progressbar.progressbar(range(len(encryptedPUUIDs)), widgets=widgets):
+    puuid = encryptedPUUIDs[i]
     matches = matchRequester.RequestMatchIds(region, puuid, 0, 100, queueType)
     matchIDs.update(matches)
 

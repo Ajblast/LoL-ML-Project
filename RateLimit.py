@@ -1,4 +1,7 @@
+import math
 import time
+import progressbar
+
 
 class RateLimit:
     #Rate is how many requests can be done in the time frame (In Seconds)
@@ -21,8 +24,12 @@ class RateLimit:
 
         # If the request count equals the rate, wait for the passedTime + timeEpsilon to reach the time frame
         if (self.requests == self.rate):
-            while (self._DeltaTime() + self.timeEpsilon < self.timeFrame):
-                print("Waiting on request timeframe limit. Requests {}/{} | TimeFrame {:.2f}/{:.2f}".format(self.requests, self.rate, self._DeltaTime(), self.timeFrame))
+            widgets = ["Waiting RateLimit [", progressbar.Counter(format='%(value)02d/%(max_value)d'), '][', progressbar.Timer(format="Elapsed Time: %(elapsed)s"), ']']
+            
+            bar = progressbar.ProgressBar(max_value=math.trunc(self.timeFrame + self.timeEpsilon))
+            bar.update(math.trunc(self._DeltaTime()))
+            while (self._DeltaTime() < self.timeFrame + self.timeEpsilon):
+                bar.update(math.trunc(self._DeltaTime()))
                 time.sleep(self.sleepTime)
 
     def _reset(self):
