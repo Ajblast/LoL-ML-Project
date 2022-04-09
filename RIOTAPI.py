@@ -20,6 +20,14 @@ class MajorRegion(Enum):
     ASIA = "asia"
     EUROPE = "europe"
 
+class QueueType(Enum):
+    Draft5x5 = 400
+    Ranked5x5 = 420
+    Blind5x5 = 430
+    Flex5x5 = 440
+    ARAM = 450
+    CLASH = 700
+
 class RIOTAPI:
     def __init__(self, apikey : str):
         self.key = apikey
