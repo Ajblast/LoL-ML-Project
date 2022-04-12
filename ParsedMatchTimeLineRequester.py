@@ -14,7 +14,7 @@ class ParsedMatchTimeLineRequester:
         print("\nRequest Match Timelines")
 
         matches = []
-        widgets = ['[', progressbar.Counter(format='%(value)02d/%(max_value)d'), ']', progressbar.Timer(format="Elapsed Time: %(elapsed)s"), ']', progressbar.Bar('*')]
+        widgets = ['[', progressbar.Counter(format='%(value)d/%(max_value)d'), ']', progressbar.Timer(format="Elapsed Time: %(elapsed)s"), ']', progressbar.Bar('*')]
         for i in progressbar.progressbar(range(len(gameIDs)), widgets=widgets):
             matchid = gameIDs[i]
             match = self._matchRequester.RequestMatchTimeline(self._region, matchid)
