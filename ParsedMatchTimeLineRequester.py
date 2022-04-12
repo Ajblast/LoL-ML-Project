@@ -8,7 +8,7 @@ class ParsedMatchTimeLineRequester:
         self._matchRequester = MatchRequester(api)
         self._region = region
         self._server = server
-        self._eventsCaredAbout = [ "CHAMPION_KILL", "CHAMPION_SPECIAL_KILL", "BUILDING_KILL", "ELITE_MONSTER_KILL", "DRAGON_SOUL_GIVEN", "WARD_PLACED", "WARD_KILL"]
+        self._eventsCaredAbout = [ "CHAMPION_KILL", "CHAMPION_SPECIAL_KILL", "BUILDING_KILL", "ELITE_MONSTER_KILL", "DRAGON_SOUL_GIVEN", "WARD_PLACED", "WARD_KILL", "GAME_END"]
 
     def RequestMatchTimelines(self, gameIDs : list):
         print("\nRequest Match Timelines")

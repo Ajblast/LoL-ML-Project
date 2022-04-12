@@ -3,6 +3,7 @@ from LeagueRequester import LeagueRequester
 from MatchRequester import MatchRequester
 from SummonerRequester import SummonerRequester
 import progressbar
+import sys
 
 # Fetch enctyped PUUIDs from a league entry
 def FetchEncryptedPUUIDs(api : RIOTAPI, server : Server, leagueEntries : dict):
@@ -25,7 +26,7 @@ def FetchEncryptedPUUIDs(api : RIOTAPI, server : Server, leagueEntries : dict):
     return summonerPUUIDs
 
 
-api = RIOTAPI("RGAPI-8d6f5af5-56ca-42ce-b1b4-9f6e2b06d473")
+api = RIOTAPI(sys.argv[1])
 matchRequester = MatchRequester(api)
 leagueRequester = LeagueRequester(api)
 region = MajorRegion.AMERICAS
