@@ -13,7 +13,7 @@ server = Server.NA
 parser = ParsedMatchTimeLineRequester(api, region, server)
 
 with open("MatchIds.txt", "r") as infile:
-    matchID = infile.read().splitlines()[1]
+    matchID = infile.read().splitlines()[9]
 
     print(f":{matchID}:")
 
