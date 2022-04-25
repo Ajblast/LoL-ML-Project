@@ -4,8 +4,10 @@ import random
 import pandas as pd
 import numpy as np
 
+print("Load Model")
 model = torch.load("TestModel.pt")
 
+print("\nLoad Train Test Set")
 trainset = []
 testset = []
 with open("TrainingSet.json", "r") as infile:
@@ -13,6 +15,7 @@ with open("TrainingSet.json", "r") as infile:
 with open("TestingSet.json", "r") as infile:
     testset = json.load(infile)
 
+print("\nModel Evaluation:")
 correctPred = 0
 totalPred = 0
 with torch.no_grad():

@@ -49,6 +49,7 @@ team200Ids = [6, 7, 8, 9, 10]
 
 mactchdict = dict()
 
+print("Pre Process Match Time Lines")
 with open("Matches.json", "r") as infile:
     matches = json.load(infile)   
 
@@ -178,5 +179,6 @@ with open("Matches.json", "r") as infile:
 
         mactchdict[match['gameid']] = evenmoreoverall.copy()
 
+print("\nWrite Processed File")
 with open("MatchesProcessed.json", "w") as outfile:
     json.dump(mactchdict, outfile, separators=(',', ':'))

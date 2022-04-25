@@ -16,6 +16,7 @@ dropoutRate = float(sys.argv[3]) #Deafult .25
 learningRate = float(sys.argv[4]) #Default 0.01
 
 
+print("Load Matches")
 #Load the matches
 matches = None
 with open("MatchesProcessed.json", "r") as infile:
@@ -55,6 +56,7 @@ optimizer = optim.SGD(model.parameters(), lr=learningRate)
 
 totalloss = []
 
+print("\nModel Training:")
 #Train
 widgets = ['[', progressbar.Counter(format='%(value)d/%(max_value)d'), ']', progressbar.Timer(format="Elapsed Time: %(elapsed)s"), ']', progressbar.Bar('*')]
 for i in progressbar.progressbar(range(len(trainset)), widgets=widgets):
@@ -85,4 +87,5 @@ for i in progressbar.progressbar(range(len(trainset)), widgets=widgets):
         totalloss.clear()
 
 
+print("\nSave Model")
 torch.save(model, "TestModel.pt")
