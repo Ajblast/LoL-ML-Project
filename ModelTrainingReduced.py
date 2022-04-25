@@ -6,8 +6,15 @@ import random
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import sys
 
 import LSTMModel
+
+hiddenSize = int(sys.argv[1]) #default 8
+layerCount = int(sys.argv[2]) #default 2
+dropoutRate = float(sys.argv[3]) #default .25
+learningRate = float(sys.argv[4])#default 0.01
+
 
 #Load the matches
 matches = None
@@ -35,11 +42,16 @@ testset = [x for x in indices if x not in trainset]
 trainset = [matchDataFrames[i] for i in trainset]
 testset = [matchDataFrames[i] for i in testset]
 
+with open("TrainingSetReduced.json", "w") as outfile:
+    json.dump(trainset,outfile )
+
+with open("TestingSetReduced.json", "w") as outfile:
+    json.dump(testset, outfile)
 
 #Create the LSTM model
-model = LSTMModel.LSTMModel(2, 102, 32, 2)
+model = LSTMModel.LSTMModel(2, 102, hiddenSize, layerCount, dropoutRate)
 loss_function = nn.NLLLoss()
-optimizer = optim.SGD(model.parameters(), lr=0.01)
+optimizer = optim.SGD(model.parameters(), lr=learningRate)
 
 totalloss = []
 
@@ -70,6 +82,7 @@ for i in progressbar.progressbar(range(len(trainset)), widgets=widgets):
 
     if i % int(len(trainset) * .1) == 0:
         print(f"\nEpoch {i}, Loss: {np.average(np.asarray(totalloss)):.2f}")
+        totalloss.clear()
 
 
 torch.save(model, "TestModel.pt")
