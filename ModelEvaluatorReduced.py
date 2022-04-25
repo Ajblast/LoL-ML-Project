@@ -1,36 +1,19 @@
 import torch
 import json
-import random
 import pandas as pd
 import numpy as np
 
 model = torch.load("TestModel.pt")
 
 #Load the matches
-matches = None
-with open("ReducedMatchesProcessed2-3.json", "r") as infile:
-    matches = json.load(infile)
+trainset = []
+testset = []
 
-#Get the match data frames
-matchDataFrames = []
-for matchid in matches:
-    match = matches[matchid]
-    winningTeam = match['winningteam']
-    frames = match['frames']
+with open("TrainingSetReduced.json", "r") as infile:
+    trainset = json.load(infile)
 
-    matchDataFrame = pd.DataFrame(frames).T
-    matchDataFrame['winningteam'] = winningTeam
-
-    matchDataFrames.append(matchDataFrame)
-del matches
-
-#Get the training and test set
-indices = range(len(matchDataFrames))
-trainset = random.sample(indices, k = int(len(indices) * .8))
-testset = [x for x in indices if x not in trainset]
-
-trainset = [matchDataFrames[i] for i in trainset]
-testset = [matchDataFrames[i] for i in testset]
+with open("TestingSetReduced.json", "r") as infile:
+    testset = json.load(infile)
 
 correctPred = 0
 totalPred = 0
