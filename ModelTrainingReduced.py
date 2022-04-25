@@ -43,10 +43,10 @@ trainset = [matchDataFrames[i] for i in trainset]
 testset = [matchDataFrames[i] for i in testset]
 
 with open("TrainingSetReduced.json", "w") as outfile:
-    json.dump(trainset)
+    json.dump(trainset,outfile )
 
 with open("TestingSetReduced.json", "w") as outfile:
-    json.dump(testset)
+    json.dump(testset, outfile)
 
 #Create the LSTM model
 model = LSTMModel.LSTMModel(2, 102, hiddenSize, layerCount, dropoutRate)
