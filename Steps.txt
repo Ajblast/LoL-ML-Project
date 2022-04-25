@@ -1,0 +1,6 @@
+FetchMatchIds.py [API Key]
+GetMatchTimeData.py [API Key] [Quarter of Dataset to pull (1-4)]
+MatchJsonCombiner.py [Numer of Quarters (1-4)]
+MatchTimelinePreProcessor.py
+ModelTraining.py [Hidden Layer Size (8)] [LSTM Layer Counter (2)] [Dropout Rate (0.25)] [Learning Rate (0.01)]
+ModelEvaluator.py

@@ -2,7 +2,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class LSTMModel(nn.Module):
-    def __init__(self, num_classes, input_size, hidden_size, num_layers):
+    def __init__(self, num_classes, input_size, hidden_size, num_layers, dropout = 0):
         super(LSTMModel, self).__init__()
         self.num_classes = num_classes  #number of classes
         self.num_layers = num_layers    #number of layers
@@ -10,7 +10,7 @@ class LSTMModel(nn.Module):
         self.hidden_size = hidden_size  #hidden state
 
         #LSTM model
-        self.lstm = nn.LSTM(input_size=input_size, hidden_size=hidden_size, num_layers=num_layers)
+        self.lstm = nn.LSTM(input_size=input_size, hidden_size=hidden_size, num_layers=num_layers, dropout = dropout)
         #Final linear layer
         self.fc = nn.Linear(hidden_size, num_classes)
     
