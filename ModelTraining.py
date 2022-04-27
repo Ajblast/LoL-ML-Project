@@ -40,14 +40,13 @@ indices = range(len(matchDataFrames))
 trainset = random.sample(indices, k = int(len(indices) * .8))
 testset = [x for x in indices if x not in trainset]
 
-trainset = [matchDataFrames[i] for i in trainset]
-testset = [matchDataFrames[i] for i in testset]
-
 with open("TrainingSet.json", "w") as outfile:
     json.dump(trainset, outfile)
 with open("TestingSet.json", "w") as outfile:
     json.dump(testset, outfile)
 
+trainset = [matchDataFrames[i] for i in trainset]
+testset = [matchDataFrames[i] for i in testset]
 
 #Create the LSTM model
 model = LSTMModel.LSTMModel(2, 392, hiddenSize, layerCount, dropoutRate)

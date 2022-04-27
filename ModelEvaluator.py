@@ -8,12 +8,34 @@ print("Load Model")
 model = torch.load("TestModel.pt")
 
 print("\nLoad Train Test Set")
+#Load the matches
+matches = None
+with open("MatchesProcessed.json", "r") as infile:
+    matches = json.load(infile)
+
+#Get the match data frames
+matchDataFrames = []
+for matchid in matches:
+    match = matches[matchid]
+    winningTeam = match['winningteam']
+    frames = match['frames']
+
+    matchDataFrame = pd.DataFrame(frames).T
+    matchDataFrame['winningteam'] = winningTeam
+
+    matchDataFrames.append(matchDataFrame)
+del matches
+
 trainset = []
 testset = []
 with open("TrainingSet.json", "r") as infile:
     trainset = json.load(infile)
 with open("TestingSet.json", "r") as infile:
     testset = json.load(infile)
+
+trainset = [matchDataFrames[i] for i in trainset]
+testset = [matchDataFrames[i] for i in testset]
+
 
 print("\nModel Evaluation:")
 correctPred = 0
