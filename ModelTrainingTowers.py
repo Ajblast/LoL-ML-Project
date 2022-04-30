@@ -18,7 +18,7 @@ learningRate = float(sys.argv[4])#default 0.01
 
 #Load the matches
 matches = None
-with open("ReducedMatchesProcessed0.json", "r") as infile:
+with open("MatchesProcessedTowers.json", "r") as infile:
     matches = json.load(infile)
 
 #Get the match data frames
@@ -49,7 +49,7 @@ trainset = [matchDataFrames[i] for i in trainset]
 testset = [matchDataFrames[i] for i in testset]
 
 #Create the LSTM model
-model = LSTMModel.LSTMModel(2, 102, hiddenSize, layerCount, dropoutRate)
+model = LSTMModel.LSTMModel(2, 124, hiddenSize, layerCount, dropoutRate)
 loss_function = nn.NLLLoss()
 optimizer = optim.SGD(model.parameters(), lr=learningRate)
 

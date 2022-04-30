@@ -7,7 +7,7 @@ model = torch.load("TestModel.pt")
 
 #Load the matches
 matches = None
-with open("ReducedMatchesProcessed0.json", "r") as infile:
+with open("MatchesProcessedTowers.json", "r") as infile:
     matches = json.load(infile)
 
 #Get the match data frames

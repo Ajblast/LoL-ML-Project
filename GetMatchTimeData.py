@@ -15,7 +15,9 @@ requester = ParsedMatchTimeLineRequester(api, region, server)
 
 with open(f"MatchIds.txt", "r") as matchFile:
     gameIds = matchFile.read().splitlines()
-    if(quarter == 1):
+    if(quarter == 0):
+        gameIds = gameIds[0:551]
+    elif(quarter == 1):
         gameIds = gameIds[quarters[0][0]:quarters[0][1]]
     elif(quarter == 2):
         gameIds = gameIds[quarters[1][0]:quarters[1][1]]
@@ -26,5 +28,9 @@ with open(f"MatchIds.txt", "r") as matchFile:
 
     matches = requester.RequestMatchTimelines(gameIds)
 
-    with open(f"Matches{quarter}.json", "w") as outfile:
-        json.dump(matches, outfile)
+    if(quarter == -1):
+        with open(f"Matches.json", "w") as outfile:
+            json.dump(matches, outfile)
+    else:
+        with open(f"Matches{quarter}.json", "w") as outfile:
+            json.dump(matches, outfile)

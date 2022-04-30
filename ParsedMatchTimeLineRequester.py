@@ -18,8 +18,8 @@ class ParsedMatchTimeLineRequester:
         for i in progressbar.progressbar(range(len(gameIDs)), widgets=widgets):
             matchid = gameIDs[i]
             match = self._matchRequester.RequestMatchTimeline(self._region, matchid)
-
             matchInfo = {"gameid" : matchid, "frames" : []}
+            
             matchFrames = match['info']['frames']
 
             #Iterate over every frame

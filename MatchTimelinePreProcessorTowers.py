@@ -43,6 +43,51 @@
 import json
 import progressbar
 
+def Team100InhibToDictString(inhibLoc):
+    if(inhibLoc == "TOP_LANE"):
+        return "Team100_Top_InhibKills"
+    if(inhibLoc == "MID_LANE"):
+        return "Team100_Mid_InhibKills"
+    if(inhibLoc == "BOT_LANE"):
+        return "Team100_Top_InhibKills"
+
+def Team200InhibToDictString(inhibLoc):
+    if(inhibLoc == "TOP_LANE"):
+        return "Team200_Top_InhibKills"
+    if(inhibLoc == "MID_LANE"):
+        return "Team200_Mid_InhibKills"
+    if(inhibLoc == "BOT_LANE"):
+        return "Team200_Top_InhibKills"
+
+def TowerToDictString(isTeam100, lane, level):
+    outString = ""
+    if(isTeam100):
+        outString += "Team100_"
+    else:
+        outString += "Team200_"
+
+    if(level == "NEXUS_TURRET"):
+        return outString + "Nexus_TowerKill"
+
+    if(lane == "TOP_LANE"):
+        outString += "Top_"
+    elif(lane == "MID_LANE"):
+        outString += "Mid_"
+    elif(lane == "BOT_LANE"):
+        outString += "Bot_"
+
+    if(level == "OUTER_TURRET"):
+        outString += "Outer_TowerKill"
+    elif(level == "INNER_TURRET"):
+        outString += "Inner_TowerKill"
+    elif(level == "BASE_TURRET"):
+        outString += "Base_TowerKill"
+
+    return outString
+
+    
+
+
 validWardTypes = ['YELLOW_TRINKET', "BLUE_TRINKET", "SIGHT_WARD", "CONTROL_WARD"]
 team100Ids = [1, 2, 3, 4, 5]
 team200Ids = [6, 7, 8, 9, 10]
@@ -66,10 +111,36 @@ with open("Matches0.json", "r") as infile:
 
         teaminfo['Team100_Aces'] = 0
         teaminfo['Team200_Aces'] = 0
-        teaminfo['Team100_TowerKills'] = 0
-        teaminfo['Team200_TowerKills'] = 0
-        teaminfo['Team100_InhibKills'] = 0
-        teaminfo['Team200_InhibKills'] = 0
+
+
+        teaminfo['Team100_Bot_Outer_TowerKill'] = 0
+        teaminfo['Team100_Mid_Outer_TowerKill'] = 0
+        teaminfo['Team100_Top_Outer_TowerKill'] = 0
+        teaminfo['Team100_Bot_Inner_TowerKill'] = 0
+        teaminfo['Team100_Mid_Inner_TowerKill'] = 0
+        teaminfo['Team100_Top_Inner_TowerKill'] = 0
+        teaminfo['Team100_Bot_Base_TowerKill'] = 0
+        teaminfo['Team100_Mid_Base_TowerKill'] = 0
+        teaminfo['Team100_Top_Base_TowerKill'] = 0
+        teaminfo['Team100_Nexus_TowerKill'] = 0
+        teaminfo['Team100_Bot_InhibKills'] = 0
+        teaminfo['Team100_Mid_InhibKills'] = 0
+        teaminfo['Team100_Top_InhibKills'] = 0
+        
+        teaminfo['Team200_Bot_Outer_TowerKill'] = 0
+        teaminfo['Team200_Mid_Outer_TowerKill'] = 0
+        teaminfo['Team200_Top_Outer_TowerKill'] = 0
+        teaminfo['Team200_Bot_Inner_TowerKill'] = 0
+        teaminfo['Team200_Mid_Inner_TowerKill'] = 0
+        teaminfo['Team200_Top_Inner_TowerKill'] = 0
+        teaminfo['Team200_Bot_Base_TowerKill'] = 0
+        teaminfo['Team200_Mid_Base_TowerKill'] = 0
+        teaminfo['Team200_Top_Base_TowerKill'] = 0
+        teaminfo['Team200_Nexus_TowerKill'] = 0
+        teaminfo['Team200_Bot_InhibKills'] = 0
+        teaminfo['Team200_Mid_InhibKills'] = 0
+        teaminfo['Team200_Top_InhibKills'] = 0
+
         teaminfo['Team100_Barons'] = 0
         teaminfo['Team200_Barons'] = 0
         teaminfo['Team100_RiftHeralds'] = 0
@@ -123,14 +194,14 @@ with open("Matches0.json", "r") as infile:
                 elif (eventType == 'BUILDING_KILL'):
                     if (event['buildingType'] == "TOWER_BUILDING"):
                         if (event['killerId'] in team100Ids):
-                            teaminfo[f'Team100_TowerKills'] += 1
+                            teaminfo[TowerToDictString(True,event['laneType'],event['towerType'])] += 1
                         elif (event['killerId'] in team200Ids):
-                            teaminfo[f'Team200_TowerKills'] += 1
+                            teaminfo[TowerToDictString(False,event['laneType'],event['towerType'])] += 1
                     elif (event['buildingType'] == "INHIBITOR_BUILDING"):
                         if (event['killerId'] in team100Ids):
-                            teaminfo[f'Team100_InhibKills'] += 1
+                            teaminfo[Team100InhibToDictString(event["laneType"])] += 1
                         elif (event['killerId'] in team200Ids):
-                            teaminfo[f'Team200_InhibKills'] += 1
+                             teaminfo[Team200InhibToDictString(event["laneType"])] += 1
                     pass
                 elif (eventType == 'ELITE_MONSTER_KILL'):
                     teamid = event['killerTeamId']
@@ -182,5 +253,5 @@ with open("Matches0.json", "r") as infile:
 
         mactchdict[match['gameid']] = evenmoreoverall.copy()
 
-with open("ReducedMatchesProcessed0.json", "w") as outfile:
+with open("MatchesProcessedTowers.json", "w") as outfile:
     json.dump(mactchdict, outfile, separators=(',', ':'))
